@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { HeaderComponent } from './header/header.component';
-import { TodoListComponent } from './todo-list/todo-list.component';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { Component, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ITodo } from './interfaces/todo.interface';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { HeaderComponent } from './header/header.component';
 import { StringHelper } from './helpers/string.helper';
+import { ITodo } from './interfaces/todo.interface';
+import { TodoListComponent } from './todo-list/todo-list.component';
+import { TodoService } from './services/todo.service';
 
 @Component({
   selector: 'app-root',
@@ -22,22 +23,41 @@ import { StringHelper } from './helpers/string.helper';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  public todos: ITodo[] = [
-    { name: 'TODO 1', isDone: false, id: StringHelper.getMostlyUniqId() },
-    { name: 'TODO 2', isDone: false, id: StringHelper.getMostlyUniqId() },
-    { name: 'TODO 3', isDone: false, id: StringHelper.getMostlyUniqId() },
-  ];
+  public todoService = inject(TodoService);
+  public todos: ITodo[] = this.todoService.getList();
 
-  public fc = new FormControl();
+  // fc est une instance d'un FormControl
+  public fc = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3),
+  ]);
 
   public addItemInList(): void {
     if (this.fc.value) {
-      this.todos.push(this.fc.value);
+      const todo: ITodo = {
+        id: StringHelper.getMostlyUniqId(),
+        isDone: false,
+        name: this.fc.value,
+      };
+
+      this.todoService.create(todo);
+      this.todos = this.todoService.getList();
       this.fc.reset();
     }
   }
 
   public removeItemFromList(id: string): void {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
+    this.todoService.deleteTodo(id);
+    this.todos = this.todoService.getList();
+  }
+
+  public setDone(id: string): void {
+    const todo = this.todoService.getItemById(id);
+    if (todo) {
+      todo.isDone = true;
+      this.todoService.updateTodo(todo);
+      this.todos = this.todoService.getList();
+      console.log(this.todos);
+    }
   }
 }
