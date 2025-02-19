@@ -51,13 +51,12 @@ export class AppComponent {
     this.todos = this.todoService.getList();
   }
 
-  public setDone(id: string): void {
+  public toggleDone(id: string): void {
     const todo = this.todoService.getItemById(id);
     if (todo) {
-      todo.isDone = true;
+      todo.isDone = !todo.isDone;
       this.todoService.updateTodo(todo);
       this.todos = this.todoService.getList();
-      console.log(this.todos);
     }
   }
 }

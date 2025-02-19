@@ -15,5 +15,5 @@
     <button mat-stroked-button [disabled]="fc.invalid" (click)="addItemInList()">Valider</button>
   </div>
   <app-todo-list [todoList]="todos" (onDeleteTodo)="removeItemFromList($event)"
-    (onTodoDone)="setDone($event)"></app-todo-list>
+    (onToggleTodoDone)="toggleDone($event)"></app-todo-list>
 </div>
