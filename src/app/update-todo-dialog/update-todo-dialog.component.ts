@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -26,10 +27,16 @@ interface ITodoModal {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './update-todo-dialog.component.html',
   styleUrl: './update-todo-dialog.component.scss',
 })
 export class UpdateTodoDialogComponent {
   readonly data = inject<ITodoModal>(MAT_DIALOG_DATA);
+
+  public fc = new FormControl(this.data.currentName, [
+    Validators.required,
+    Validators.minLength(3),
+  ]);
 }

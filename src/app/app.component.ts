@@ -51,6 +51,11 @@ export class AppComponent {
     this.todos = this.todoService.getList();
   }
 
+  public updateTodo(todo: ITodo): void {
+    this.todoService.updateTodo(todo);
+    this.todos = this.todoService.getList();
+  }
+
   public toggleDone(id: string): void {
     const todo = this.todoService.getItemById(id);
     if (todo) {

@@ -17,6 +17,7 @@ export class TodoListComponent {
 
   @Output() public onDeleteTodo = new EventEmitter<string>();
   @Output() public onToggleTodoDone = new EventEmitter<string>();
+  @Output() public onTodoUpdated = new EventEmitter<ITodo>();
 
   public readonly dialog = inject(MatDialog);
 
@@ -25,10 +26,17 @@ export class TodoListComponent {
   }
 
   public openModal(todo: ITodo): void {
-    this.dialog.open(UpdateTodoDialogComponent, {
+    const dialog = this.dialog.open(UpdateTodoDialogComponent, {
       data: {
         currentName: todo.name,
       },
+    });
+
+    dialog.afterClosed().subscribe((value) => {
+      if (value) {
+        todo.name = value;
+        this.onTodoUpdated.emit(todo);
+      }
     });
   }
 
