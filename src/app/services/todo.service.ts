@@ -1,14 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ITodo } from '../interfaces/todo.interface';
-import { StringHelper } from '../helpers/string.helper';
-
-/**
- * CRUD
- * Create
- * Read
- * Update
- * Delete
- */
 
 @Injectable({
   providedIn: 'root', // service disponible partout dans l'application

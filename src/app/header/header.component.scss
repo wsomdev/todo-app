@@ -1,0 +1,15 @@
+.link {
+  display: block;
+  margin-right: 8px;
+  cursor: pointer;
+}
+.link:hover {
+  opacity: 0.5;
+}
+.link.active {
+  color: coral;
+}
+.small {
+  margin-top: 6px;
+  font-size: smaller;
+}
